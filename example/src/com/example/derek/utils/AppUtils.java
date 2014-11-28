@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
@@ -45,6 +46,7 @@ public class AppUtils {
 
 
     public static Socket mSocket = null;
+
     /**
      * 在远端android环境下截获console信息并发往特定ip和destport
      */
@@ -78,6 +80,16 @@ public class AppUtils {
         } catch (Exception e) {
             e.printStackTrace();
 
+        }
+    }
+
+    public static int getVersionCode(Context context, String packageName) {
+        PackageManager manager = context.getPackageManager();
+        try {
+            PackageInfo packageInfo = manager.getPackageInfo(packageName, 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            return -1;
         }
     }
 }
