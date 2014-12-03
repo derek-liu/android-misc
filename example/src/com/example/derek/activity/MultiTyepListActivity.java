@@ -16,6 +16,13 @@ import java.util.Random;
 
 /**
  * Created by liudingyu on 14/12/3.
+ *
+ * 在getview根据获得的item类型，就可以获得不同类型的itemView对应的不同类型的ViewHolder
+ * 从而进行不同类型的item的显示
+ *
+ * PS:
+ * listview内部是用数组存储不同类型的itemView，类型的字面值直接被当做数组下表使用
+ * 所以定义类型时，必须从零累加上去，符合数组下标的规则才可以；否则会报数组越界错误
  */
 public class MultiTyepListActivity extends ListActivity {
     private MultiTypeAdapter mAdatper = null;
@@ -81,7 +88,7 @@ class MultiTypeAdapter extends BaseAdapter {
         ViewHolder holder = null;
         ItemInfo info = mData.get(position);
         if (convertView == null) {
-            switch (info.type) {
+            switch (getItemViewType(position)) {
                 case TYPE_RECEIVE:
                     convertView = mInflater.inflate(R.layout.multi_type_list_receive, null);
                     holder = new ViewHolder();
@@ -102,7 +109,7 @@ class MultiTypeAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         if (holder != null) {
-            switch (info.type) {
+            switch (getItemViewType(position)) {
                 case TYPE_RECEIVE:
                     holder.content.setText(info.content);
                     break;
