@@ -5,16 +5,9 @@
               android:layout_height="fill_parent"
         >
     <Button
-            android:id="@+id/send"
+            android:id="@+id/go_test"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="send Notify"
-            />
-    <Button
-            android:id="@+id/cancel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="cancel Notify"
-            />
+            android:text="@string/go_test"/>
 </LinearLayout>
 
