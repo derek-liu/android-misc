@@ -19,6 +19,7 @@
                   android:theme="@style/Theme.AppCompat">
         </activity>
         <activity android:name=".activity.MultiTyepListActivity"/>
+        <activity android:name=".activity.BrowserActivity" android:label="browser test"/>
     </application>
     s
 </manifest>
