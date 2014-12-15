@@ -87,6 +87,14 @@ public class BrowserActivity extends Activity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (mWebview != null && mWebview.canGoBack()) {
+            mWebview.goBack();
+        }
+        super.onBackPressed();
+    }
+
     private static class MyWebChromeClient extends WebChromeClient {
 
     }
