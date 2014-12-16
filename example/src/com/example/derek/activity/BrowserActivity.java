@@ -11,16 +11,13 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import com.example.derek.R;
 
-/**
- * Created by liudingyu on 14/12/10.
- */
 public class BrowserActivity extends Activity {
 
     protected WebView mWebview = null;
     protected Button mLoadBtn = null;
     protected Button mStopBtn = null;
     protected Button m163Btn = null;
-    protected final static String URL = "http://carleolee.net/d/i.php";
+    protected final static String URL = "http://carleolee.net/d/r.php";
     private MyWebViewClient mWebViewClient = new MyWebViewClient();
     private MyWebChromeClient mWebChromeClient = new MyWebChromeClient();
     @Override
@@ -67,23 +64,23 @@ public class BrowserActivity extends Activity {
     private static class MyWebViewClient extends WebViewClient {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            Log.d("k.k", "onPageStarted " + " geturl " + view.getUrl() + " originUrl " + view.getOriginalUrl() + " url " + url);
+            Log.d("k.k", "onPageStarted " + " --geturl " + view.getUrl() + " --originUrl " + view.getOriginalUrl() + " --url " + url);
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            Log.d("k.k", "onPageFinished " + " geturl " + view.getUrl() + " originUrl " + view.getOriginalUrl() + " url " + url);
+            Log.d("k.k", "onPageFinished " + " --geturl " + view.getUrl() + " --originUrl " + view.getOriginalUrl() + " --url " + url);
         }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            Log.d("k.k", "shouldOverrideUrlLoading " + " geturl " + view.getUrl() + " originUrl " + view.getOriginalUrl() + " url " + url);
+            Log.d("k.k", "shouldOverrideUrlLoading " + " --geturl " + view.getUrl() + " --originUrl " + view.getOriginalUrl() + " --url " + url);
             return super.shouldOverrideUrlLoading(view, url);
         }
 
         @Override
         public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
-            Log.d("k.k", "doUpdateVisitedHistory " + " geturl " + view.getUrl() + " originUrl " + view.getOriginalUrl() + " url " + url);
+            Log.d("k.k", "doUpdateVisitedHistory " + " --geturl " + view.getUrl() + " --originUrl " + view.getOriginalUrl() + " --url " + url);
         }
     }
 
