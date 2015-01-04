@@ -3,9 +3,11 @@ package com.example.derek.activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.example.derek.R;
@@ -47,7 +49,21 @@ public class MultiTyepListActivity extends ListActivity {
             mAdatper.addItem(info);
 
         }
+        TextView headerView = new TextView(this);
+        headerView.setText("header view");
+        getListView().addHeaderView(headerView);
         setListAdapter(mAdatper);
+        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                Log.d("k.k", "onScrollStateChanged: lastvisiblePosition" + getListView().getLastVisiblePosition() + " headercount:" + getListView().getHeaderViewsCount());
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Log.d("k.k", "onScroll firstVisibleItem: " + firstVisibleItem + " visibleItemCount: " + visibleItemCount + " totalItemCount: " + totalItemCount);
+            }
+        });
     }
 }
 
