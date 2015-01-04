@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.example.derek.R;
 
@@ -18,25 +20,27 @@ import java.util.Random;
 
 /**
  * Created by liudingyu on 14/12/3.
- *
+ * <p/>
  * 在getview根据获得的item类型，就可以获得不同类型的itemView对应的不同类型的ViewHolder
  * 从而进行不同类型的item的显示
- *
+ * <p/>
  * PS:
  * listview内部是用数组存储不同类型的itemView，类型的字面值直接被当做数组下表使用
  * 所以定义类型时，必须从零累加上去，符合数组下标的规则才可以；否则会报数组越界错误
  */
 public class MultiTyepListActivity extends ListActivity {
     private MultiTypeAdapter mAdatper = null;
+    private View mTouchView = null;
+    private int mDownX, mDownY;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAdatper = new MultiTypeAdapter(this);
         Random random = new Random(System.currentTimeMillis());
-        for (int i = 0 ; i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             ItemInfo info = new ItemInfo();
-            switch (Math.abs(random.nextInt()) % 2){
+            switch (Math.abs(random.nextInt()) % 2) {
                 case 0:
                     info.content = "send " + i;
                     info.type = MultiTypeAdapter.TYPE_SEND;
@@ -64,6 +68,43 @@ public class MultiTyepListActivity extends ListActivity {
                 Log.d("k.k", "onScroll firstVisibleItem: " + firstVisibleItem + " visibleItemCount: " + visibleItemCount + " totalItemCount: " + totalItemCount);
             }
         });
+        getListView().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return onListTouch(v, event);
+            }
+        });
+    }
+
+    private boolean onListTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mDownX = (int) event.getX();
+                mDownY = (int) event.getY();
+                ListView listView = (ListView)v;
+                int position = listView.pointToPosition(mDownX, mDownY);
+                mTouchView = listView.getChildAt(position - listView.getFirstVisiblePosition());
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mTouchView != null) {
+                    int dx = (int)(mDownX - event.getX());
+                    //dx = (dx > mTouchView.getWidth()) ? mTouchView.getWidth() : dx;
+                    //dx = (dx < 0) ? 0 : dx;
+                    Log.d("k.k", "dx: " + dx);
+                    if (mTouchView.getLeft() >= 0) {
+                        mTouchView.layout(0 - dx, mTouchView.getTop(), mTouchView.getRight() - dx, mTouchView.getBottom());
+                    }
+                    return true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                mTouchView.layout(0, mTouchView.getTop(), mTouchView.getWidth(), mTouchView.getBottom());
+                break;
+            default:
+                break;
+        }
+
+        return v.onTouchEvent(event);
     }
 }
 
