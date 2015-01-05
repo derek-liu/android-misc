@@ -60,12 +60,12 @@ public class MultiTyepListActivity extends ListActivity {
         getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.d("k.k", "onScrollStateChanged: lastvisiblePosition" + getListView().getLastVisiblePosition() + " headercount:" + getListView().getHeaderViewsCount());
+                //Log.d("k.k", "onScrollStateChanged: lastvisiblePosition" + getListView().getLastVisiblePosition() + " headercount:" + getListView().getHeaderViewsCount());
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Log.d("k.k", "onScroll firstVisibleItem: " + firstVisibleItem + " visibleItemCount: " + visibleItemCount + " totalItemCount: " + totalItemCount);
+                //Log.d("k.k", "onScroll firstVisibleItem: " + firstVisibleItem + " visibleItemCount: " + visibleItemCount + " totalItemCount: " + totalItemCount);
             }
         });
         getListView().setOnTouchListener(new View.OnTouchListener() {
@@ -90,11 +90,9 @@ public class MultiTyepListActivity extends ListActivity {
                     int dx = (int)(mDownX - event.getX());
                     //dx = (dx > mTouchView.getWidth()) ? mTouchView.getWidth() : dx;
                     //dx = (dx < 0) ? 0 : dx;
-                    Log.d("k.k", "dx: " + dx);
                     if (mTouchView.getLeft() >= 0) {
                         mTouchView.layout(0 - dx, mTouchView.getTop(), mTouchView.getRight() - dx, mTouchView.getBottom());
                     }
-                    return true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -142,6 +140,7 @@ class MultiTypeAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        Log.d("k.k", "position: " + position);
         ViewHolder holder = null;
         ItemInfo info = mData.get(position);
         if (convertView == null) {
