@@ -3,8 +3,8 @@ package com.android.volley.net;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
 import com.android.volley.toolbox.ImageLoader.ImageCache;
+import com.android.volley.utils.LruCache;
 
 import java.lang.ref.WeakReference;
 
