@@ -26,10 +26,6 @@ public class VolleyCacheMgr {
      */
     public static long getVolleyCacheSize(Context context) {
         long size = 0;
-        boolean sdExist = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-        if (!sdExist) {
-            return -1;
-        }
         File cacheDir = new File(context.getCacheDir(), Volley.DEFAULT_CACHE_DIR);
         if (cacheDir.exists() && cacheDir.isDirectory()) {
             size += getFileLength(cacheDir);
