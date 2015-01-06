@@ -30,7 +30,7 @@ import java.io.File;
 public class Volley {
 
     /** Default on-disk cache directory. */
-    private static final String DEFAULT_CACHE_DIR = "volley";
+    public static final String DEFAULT_CACHE_DIR = "volley";
 
     /**
      * Creates a default instance of the worker pool and calls {@link RequestQueue#start()} on it.
