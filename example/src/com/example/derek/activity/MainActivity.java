@@ -1,33 +1,51 @@
 package com.example.derek.activity;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
+import android.os.*;
 import android.util.Log;
 import android.view.View;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import android.widget.Button;
 import com.android.volley.net.NetClient;
 import com.android.volley.net.listener.INetClientListener;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.derek.R;
 
 public class MainActivity extends Activity {
-    /**
-     * Called when the activity is first created.
-     */
+
+    private Button mBtn;
+    private Handler handler = null;
+    private HandlerThread mHandlerThread = new HandlerThread("example-handlethread");
+    private Handler mHandlerTest = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        findViewById(R.id.go_test).setOnClickListener(new View.OnClickListener() {
+        mBtn = (Button) findViewById(R.id.go_test);
+        mBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleClick();
+                handler.sendEmptyMessage(0);
+                mHandlerTest.sendEmptyMessage(1);
             }
         });
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Log.d("k.k", "normal handler: " + Thread.currentThread() + " mainLooper:" + (Looper.myLooper() == Looper.getMainLooper()));
+            }
+        };
+
+        mHandlerThread.start();
+        mHandlerTest = new Handler(mHandlerThread.getLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Log.d("k.k", "handler thread: " + Thread.currentThread() + " mainLooper:" + (Looper.myLooper() == Looper.getMainLooper()));
+            }
+        };
+
     }
 
     private void handleClick() {
