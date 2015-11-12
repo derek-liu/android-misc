@@ -5,4 +5,15 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="go_test">转入测试页</string>
+
+
+    <string name="ss_time_now">Just now</string>
+    <string name="ss_time_minutes">minutes ago</string>
+    <string name="ss_time_minute">minute ago</string>
+    <string name="ss_time_hours">hours ago</string>
+    <string name="ss_time_hour">hour ago</string>
+    <string name="ss_time_days">days ago</string>
+    <string name="ss_time_day">day ago</string>
+    <string name="ss_time_months">months ago</string>
+    <string name="ss_time_month">month ago</string>
 </resources>
