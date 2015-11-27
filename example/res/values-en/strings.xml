@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">android-demo</string>
-    <string name="content">"常驻"</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="go_test">转入测试页</string>
+    <string name="go_test">go test</string>
+    <string name="change_zh">change_zh</string>
+    <string name="change_en">change_en</string>
 </resources>

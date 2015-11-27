@@ -3,23 +3,28 @@
           package="com.example.derek"
           android:versionCode="1"
           android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="7"/>
+    <uses-sdk android:minSdkVersion="15"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
                  android:name=".DemoApplication">
         <activity android:name=".activity.MainActivity"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:configChanges="locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.CircleProgressActivity" android:icon="@drawable/ic_launcher"
-                  android:theme="@style/Theme.AppCompat">
-        </activity>
-        <activity android:name=".activity.MultiTyepListActivity"/>
-        <activity android:name=".activity.BrowserActivity" android:label="browser test"/>
+        <activity
+                android:name=".activity.CircleProgressActivity" android:icon="@drawable/ic_launcher"
+                android:theme="@style/Theme.AppCompat"/>
+        <activity
+                android:name=".activity.MultiTyepListActivity"/>
+        <activity
+                android:name=".activity.BrowserActivity" android:label="browser test"/>
+        <activity
+                android:name=".activity.LanguageActivity" android:configChanges="locale"/>
     </application>
 </manifest>
