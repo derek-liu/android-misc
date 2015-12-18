@@ -3,16 +3,17 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-        >
+    >
     <Button
-            android:id="@+id/changeZH"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_zh"/>
+        android:id="@+id/changeEN"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/change_en"/>
     <Button
-            android:id="@+id/changeEN"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_en"/>
+        android:id="@+id/changeZH"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/change_zh"/>
+
 </LinearLayout>
 

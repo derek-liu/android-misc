@@ -22,10 +22,11 @@ public class LanguageActivity extends Activity {
                 DisplayMetrics dm = getResources().getDisplayMetrics();
                 config.locale = Locale.ENGLISH;
                 getResources().updateConfiguration(config, dm);
-                Intent i = getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+//                Intent i = getBaseContext().getPackageManager()
+//                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
+//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(i);
+//                Locale.setDefault(Locale.ENGLISH);
             }
         });
         findViewById(R.id.changeZH).setOnClickListener(new View.OnClickListener() {
@@ -33,8 +34,9 @@ public class LanguageActivity extends Activity {
             public void onClick(View view) {
                 Configuration config = getResources().getConfiguration();
                 DisplayMetrics dm = getResources().getDisplayMetrics();
-                config.locale = Locale.SIMPLIFIED_CHINESE;
+                config.locale = Locale.CHINA;
                 getResources().updateConfiguration(config, dm);
+//                Locale.setDefault(Locale.CHINA);
             }
         });
     }

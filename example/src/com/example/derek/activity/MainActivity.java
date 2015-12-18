@@ -1,52 +1,47 @@
 package com.example.derek.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.text.ICUCompat;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.example.derek.R;
-import org.json.JSONObject;
-
-import java.util.Locale;
+import com.example.derek.view.FlowLayout;
+import com.example.derek.view.TagAdapter;
+import com.example.derek.view.TagFlowLayout;
 
 public class MainActivity extends Activity {
 
-    private Button mBtn;
+    private String[] mVals = new String[]
+            {"Hello", "Android", "Weclome Hi ", "Button", "TextView", "Hello",
+                    "Android", "Weclome", "Button ImageView", "TextView", "Helloworld",
+                    "Android", "Weclome Hello", "Button Text", "TextView", "Hello", "Android", "Weclome Hi ", "Button", "TextView", "Hello",
+                    "Android", "Weclome", "Button ImageView"};
+
+    private TagFlowLayout mFlowLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        mBtn = (Button) findViewById(R.id.go_test);
-        mBtn.setOnClickListener(new View.OnClickListener() {
+        final LayoutInflater layoutInflater = LayoutInflater.from(this);
+        mFlowLayout = (TagFlowLayout) findViewById(R.id.flowlayout);
+        mFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
-            public void onClick(View v) {
-//                handleClick();
-                printLocaleInfo();
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                Toast.makeText(MainActivity.this, mVals[position], Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
-    }
-
-    private void handleClick() {
-        Intent intent = new Intent(this, LanguageActivity.class);
-        startActivity(intent);
-    }
-
-    private void printLocaleInfo() {
-        try {
-            JSONObject obj = new JSONObject();
-            obj.put("getCountry", Locale.getDefault().getCountry());
-            obj.put("getDisplayCountry", Locale.getDefault().getDisplayCountry());
-            obj.put("getDisplayLanguage", Locale.getDefault().getDisplayLanguage());
-            obj.put("getLanguage", Locale.getDefault().getLanguage());
-            obj.put("getISO3Country", Locale.getDefault().getISO3Country());
-            obj.put("getISO3Language", Locale.getDefault().getISO3Language());
-            obj.put("maximizeAndGetScriptt", ICUCompat.maximizeAndGetScript(Locale.getDefault()));
-            Log.d("d.d", obj.toString());
-        } catch (Exception e) {
-        }
+        mFlowLayout.setAdapter(new TagAdapter<String>(mVals) {
+            @Override
+            public View getView(FlowLayout parent, int position, String str) {
+                View view = layoutInflater.inflate(R.layout.flow_item, mFlowLayout, false);
+                TextView tv = (TextView) view.findViewById(R.id.text);
+                tv.setText(str);
+                return view;
+            }
+        });
     }
 }

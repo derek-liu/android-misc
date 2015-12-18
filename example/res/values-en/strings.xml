@@ -2,5 +2,5 @@
 <resources>
     <string name="go_test">go test</string>
     <string name="change_zh">change_zh</string>
-    <string name="change_en">change_en</string>
+    <string name="change_en">change_tr</string>
 </resources>
