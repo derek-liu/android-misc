@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.example.derek.R;
 import com.example.derek.view.FlowLayout;
 import com.example.derek.view.TagAdapter;
 import com.example.derek.view.TagFlowLayout;
+
+import java.util.Arrays;
 
 public class MainActivity extends Activity {
 
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
                     "Android", "Weclome", "Button ImageView"};
 
     private TagFlowLayout mFlowLayout;
+    private TagAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,13 +36,14 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
-        mFlowLayout.setAdapter(new TagAdapter<String>(mVals) {
+        mAdapter = new TagAdapter(this, Arrays.asList(mVals));
+        mFlowLayout.setAdapter(mAdapter);
+
+        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
-            public View getView(FlowLayout parent, int position, String str) {
-                View view = layoutInflater.inflate(R.layout.flow_item, mFlowLayout, false);
-                TextView tv = (TextView) view.findViewById(R.id.text);
-                tv.setText(str);
-                return view;
+            public void onClick(View v) {
+                mAdapter.toggle();
+                mAdapter.notifyDataChanged();
             }
         });
     }

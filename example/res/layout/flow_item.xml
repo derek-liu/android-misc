@@ -14,9 +14,11 @@
         android:textColor="#000000"/>
 
     <View
+        android:id="@+id/delete"
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_gravity="top|right"
-        android:background="@drawable/flow_item_delete"/>
+        android:background="@drawable/flow_item_delete"
+        android:visibility="invisible"/>
 
 </FrameLayout>
