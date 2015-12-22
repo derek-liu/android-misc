@@ -8,11 +8,13 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.TextView;
 import com.example.derek.R;
@@ -26,6 +28,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
     private static final String TAG = "TagFlowLayout";
     private MotionEvent mMotionEvent;
     private Handler mHandler = new Handler();
+    private int mTouchSlop;
 
     /**
      * 刚开始拖拽的item对应的View
@@ -69,8 +72,9 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         @Override
         public void run() {
             mIsDrag = true; // 设置可以拖拽
+            mTagAdapter.setEdit(true);
             if (mStartDragItemView != null) {
-//                mStartDragItemView.setVisibility(View.INVISIBLE);// 隐藏该item
+                mStartDragItemView.setVisibility(View.INVISIBLE);// 隐藏该item
             }
 
             // 根据我们按下的点显示item镜像
@@ -90,6 +94,7 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
             setClickable(true);
         }
         mStatusHeight = getStatusBarHeight(context);
+        mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
     }
 
     public TagFlowLayout(Context context, AttributeSet attrs) {
@@ -200,9 +205,6 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
 
     /**
      * 拖动item，在里面实现了item镜像的位置更新，item的相互交换以及GridView的自行滚动
-     *
-     * @param x
-     * @param y
      */
     private void onDragItem(int moveX, int moveY) {
         if (mDragTextView != null) {
@@ -210,12 +212,33 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
             mWindowLayoutParams.y = moveY - mPoint2ItemTop + mOffset2Top - mStatusHeight;
             mWindowManager.updateViewLayout(mDragTextView, mWindowLayoutParams); // 更新镜像的位置
         }
+        onSwapItem(moveX, moveY);
+    }
+
+    private void onSwapItem(int moveX, int moveY) {
+        final int tempPosition = findPosByView(findChild(moveX, moveY));
+        if (tempPosition < 0 || tempPosition == mDragPosition) {
+            return;
+        }
+        mTagAdapter.setHideItem(tempPosition);
+        mTagAdapter.reorderItems(mDragPosition, tempPosition);
+        final ViewTreeObserver observer = getViewTreeObserver();
+        observer.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+            @Override
+            public boolean onPreDraw() {
+                observer.removeOnPreDrawListener(this);
+                mDragPosition = tempPosition;
+                return true;
+            }
+        });
     }
 
     /**
      * 停止拖拽我们将之前隐藏的item显示出来，并将镜像移除
      */
     private void onStopDrag() {
+        mTagAdapter.setHideItem(-1);
         removeDragImage();
     }
 
@@ -224,21 +247,16 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
         TagAdapter adapter = mTagAdapter;
         TagView tagViewContainer = null;
         for (int i = 0; i < adapter.getCount(); i++) {
+            boolean hide = (i == adapter.getHidePosition());
             View tagView = adapter.getView(this, i);
-
             tagViewContainer = new TagView(getContext());
-//            ViewGroup.MarginLayoutParams clp = (ViewGroup.MarginLayoutParams) tagView.getLayoutParams();
-//            ViewGroup.MarginLayoutParams lp = new ViewGroup.MarginLayoutParams(clp);
-//            lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//            lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//            lp.topMargin = clp.topMargin;
-//            lp.bottomMargin = clp.bottomMargin;
-//            lp.leftMargin = clp.leftMargin;
-//            lp.rightMargin = clp.rightMargin;
             tagView.setDuplicateParentStateEnabled(true);
             tagViewContainer.setLayoutParams(tagView.getLayoutParams());
             tagViewContainer.addView(tagView);
             addView(tagViewContainer);
+            if (hide) {
+                tagViewContainer.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -268,6 +286,17 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
                 mDragBitmap = Bitmap.createBitmap(mStartDragItemView.getDrawingCache());
                 mStartDragItemView.destroyDrawingCache();
                 break;
+            case MotionEvent.ACTION_MOVE:
+                int moveX = (int) ev.getX();
+                int moveY = (int) ev.getY();
+                if (!mIsDrag && (Math.abs(moveX - mDownX) > mTouchSlop || Math.abs(moveY - mDownY) > mTouchSlop)
+                        && mTagAdapter.isEdit()) {
+                    mHandler.removeCallbacks(mLongClickRunnable);
+                    mHandler.post(mLongClickRunnable);
+                } else if (Math.abs(moveY - mDownY) > mTouchSlop) {// 只要GridView滚动了就移除长按事件
+                    mHandler.removeCallbacks(mLongClickRunnable);
+                }
+                break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 mHandler.removeCallbacks(mLongClickRunnable);
@@ -279,16 +308,18 @@ public class TagFlowLayout extends FlowLayout implements TagAdapter.OnDataChange
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_MOVE:
-                onDragItem((int) event.getX(), (int) event.getY());
-                break;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                onStopDrag();
-                mMotionEvent = MotionEvent.obtain(event);
-                mIsDrag = false;
-                break;
+        if (mIsDrag && mDragTextView != null) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_MOVE:
+                    onDragItem((int) event.getX(), (int) event.getY());
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    onStopDrag();
+                    mMotionEvent = MotionEvent.obtain(event);
+                    mIsDrag = false;
+                    break;
+            }
         }
         return super.onTouchEvent(event);
     }

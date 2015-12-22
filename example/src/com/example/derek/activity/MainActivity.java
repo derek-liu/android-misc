@@ -42,8 +42,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAdapter.toggle();
-                mAdapter.notifyDataChanged();
+                mAdapter.setEdit(!mAdapter.isEdit());
             }
         });
     }

@@ -15,6 +15,7 @@ public class TagAdapter {
 
     private LayoutInflater mInflater;
     private boolean mIsEdit = false;
+    private int mHidePosition = -1;
 
     public TagAdapter(Context context, List<String> datas) {
         mTagDatas = new ArrayList<String>(datas);
@@ -33,8 +34,13 @@ public class TagAdapter {
         return mTagDatas == null ? 0 : mTagDatas.size();
     }
 
-    public void toggle() {
-        mIsEdit = !mIsEdit;
+    public void setEdit(boolean edit) {
+        mIsEdit = edit;
+        notifyDataChanged();
+    }
+
+    public boolean isEdit() {
+        return mIsEdit;
     }
 
     public void notifyDataChanged() {
@@ -53,4 +59,21 @@ public class TagAdapter {
         return view;
     }
 
+    public int getHidePosition() {
+        return mHidePosition;
+    }
+
+    public void setHideItem(int postion) {
+        mHidePosition = postion;
+        notifyDataChanged();
+    }
+
+    public void reorderItems(int oldPos, int newPos) {
+        if (oldPos < 0 || newPos < 0 || oldPos > mTagDatas.size() || newPos > mTagDatas.size()) {
+            notifyDataChanged();
+            return;
+        }
+        mTagDatas.add(newPos, mTagDatas.remove(oldPos));
+        notifyDataChanged();
+    }
 }
